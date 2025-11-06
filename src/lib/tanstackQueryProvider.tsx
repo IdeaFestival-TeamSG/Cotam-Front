@@ -16,7 +16,7 @@ const TanStackProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={cn("flex min-h-screen flex-col")}>
+      <div className={cn("flex", "min-h-screen", "flex-col")}>
         {children}
         <ReactQueryDevtools initialIsOpen={false} />
       </div>
