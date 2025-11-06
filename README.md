@@ -1,37 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cotam-Front
 
-## Getting Started
+코드 탐정단 - 코드의 문제를 찾고, 토론하고, 고민하는 개발자들의 놀이터
 
-First, run the development server:
+## 기술 스택
+
+- **Framework**: Next.js 16
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **State Management**: Tanstack Query
+- **HTTP Client**: Axios
+- **Form Handling**: React Hook Form + Zod
+- **Linting**: Biome
+
+## 시작하기
+
+### 설치
+
+````bash
+pnpm install
+
+### 개발 서버 실행
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
+````
+
+브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 확인하세요.
+
+### 빌드
+
+```bash
+pnpm run build
+pnpm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 환경 변수
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`.env.local` 파일을 생성하고 다음 변수를 설정하세요:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+NEXT_PUBLIC_APP_ENV=development
+```
 
-## Learn More
+## 스크립트
 
-To learn more about Next.js, take a look at the following resources:
+- `pnpm dev` - 개발 서버 실행
+- `pnpm build` - 프로덕션 빌드
+- `pnpm start` - 프로덕션 서버 실행
+- `pnpm lint` - 린터 실행
+- `pnpm format` - 코드 포맷팅
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 프로젝트 구조
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/              # Next.js App Router
+├── components/       # React 컴포넌트
+│   └── ui/          # UI 컴포넌트
+├── hooks/           # 커스텀 훅
+├── lib/             # 유틸리티 및 라이브러리
+│   ├── api/         # API 클라이언트
+│   ├── providers/   # Context Providers
+│   └── validations/ # Zod 스키마
+└── types/           # TypeScript 타입 정의
+```
 
-## Deploy on Vercel
+## 라이선스
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Cotam-Front
+MIT
