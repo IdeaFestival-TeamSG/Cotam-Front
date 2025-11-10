@@ -1,25 +1,29 @@
 import { Theme, ThemeState } from "@/types";
 import { create } from "zustand";
 
-
-export const useThemeStore = create<ThemeState>((set) => {
-  const savedTheme =
-    typeof window !== "undefined" ? localStorage.getItem("theme") : null;
-
-  const systemPrefersDark =
-    typeof window !== "undefined"
-      ? window.matchMedia("(prefers-color-scheme: dark)").matches
-      : false;
-
-  const initialTheme: Theme =
-    (savedTheme as Theme) || (systemPrefersDark ? "dark" : "light");
-
-  if (typeof document !== "undefined") {
-    document.documentElement.setAttribute("data-theme", initialTheme);
-  }
-
+export const useThemeStore = create<ThemeState>((set, get) => {
   return {
-    theme: initialTheme,
+    theme: "light",
+    initializeTheme: () => {
+      const savedTheme =
+        typeof window !== "undefined" ? (localStorage.getItem("theme") as Theme | null) : null;
+      const systemPrefersDark =
+        typeof window !== "undefined"
+          ? window.matchMedia("(prefers-color-scheme: dark)").matches
+          : false;
+
+      const nextTheme: Theme = savedTheme ?? (systemPrefersDark ? "dark" : "light");
+      if (get().theme === nextTheme) {
+        if (typeof document !== "undefined") {
+          document.documentElement.setAttribute("data-theme", nextTheme);
+        }
+        return;
+      }
+      set({ theme: nextTheme });
+      if (typeof document !== "undefined") {
+        document.documentElement.setAttribute("data-theme", nextTheme);
+      }
+    },
     toggleThemeMode: () => {
       set((state) => {
         const newMode: Theme = state.theme === "light" ? "dark" : "light";
