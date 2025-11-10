@@ -14,5 +14,3 @@ const ThemeInitializer = () => {
 };
 
 export default ThemeInitializer;
-
-
