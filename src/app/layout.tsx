@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import TanStackProvider from "@/lib/tanstackQueryProvider";
+import TanStackProvider from "@/utils/tanstackQueryProvider";
 import ThemeInitializer from "./ThemeInitializer";
 
 export const metadata: Metadata = {
