@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import TanStackProvider from "@/lib/tanstackQueryProvider";
+import ThemeInitializer from "./ThemeInitializer";
 
 export const metadata: Metadata = {
   title: "코드 탐정단",
@@ -15,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
+        <ThemeInitializer />
         <TanStackProvider>{children}</TanStackProvider>
       </body>
     </html>

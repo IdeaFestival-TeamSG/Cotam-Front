@@ -1,7 +1,12 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib";
+import { useThemeStore } from "@/stores";
 
 const HomePage = () => {
+  const { theme, toggleThemeMode } = useThemeStore();
+
   return (
     <div
       className={cn(
@@ -9,14 +14,24 @@ const HomePage = () => {
         "w-screen",
         "h-screen",
         "justify-center",
-        "items-center"
+        "items-center",
       )}
     >
-      <Button variant={"default"}>detault</Button>
-      <Button variant={"destructive"}>detault</Button>
-      <Button variant={"ghost"}>detault</Button>
-      <Button variant={"link"}>detault</Button>
-      <Button variant={"outline"}>detault</Button>
+      <Button variant={"default"} onClick={toggleThemeMode} theme={theme}>
+        theme change
+      </Button>
+      <Button variant={"destructive"} theme={theme}>
+        detault
+      </Button>
+      <Button variant={"ghost"} theme={theme}>
+        detault
+      </Button>
+      <Button variant={"link"} theme={theme}>
+        detault
+      </Button>
+      <Button variant={"outline"} theme={theme}>
+        detault
+      </Button>
     </div>
   );
 };
