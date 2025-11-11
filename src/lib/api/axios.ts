@@ -3,8 +3,6 @@ import { getCookie } from "@/utils";
 
 type RefreshResponse = {
   accessToken: string;
-  expiresIn: number;
-  issuedAt: number;
   refreshToken: string;
 };
 
