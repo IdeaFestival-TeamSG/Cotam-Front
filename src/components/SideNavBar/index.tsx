@@ -21,13 +21,13 @@ const NAV_ITEMS = [
   {
     id: "settings",
     href: "/ranking",
-    icon: "/profileLogoNav.svg",
+    icon: "/rankingLogoNav.svg",
     clickedIcon: "/clickedRankingLogoNav.svg",
   },
   {
     id: "profile",
     href: "/profile",
-    icon: "/rankingLogoNav.svg",
+    icon: "/profileLogoNav.svg",
     clickedIcon: "/clickedProfileLogoNav.svg",
   },
 ];
@@ -58,7 +58,7 @@ const SideNavBar = () => {
   };
 
   return (
-    <nav className="pl-28 h-screen flex justify-center items-center">
+    <nav className="pl-60 h-screen flex justify-center items-center">
       <div
         className={`relative flex flex-col justify-between items-center rounded-[3rem] py-2 w-16 h-152.5
         bg-[linear-gradient(180deg,#000_0%,#113225_32.94%,#143B2C_56.55%,#297959_85.58%,#36A177_96.67%,#46CF99_100%)]
