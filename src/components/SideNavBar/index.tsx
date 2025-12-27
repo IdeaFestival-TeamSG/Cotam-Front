@@ -65,7 +65,10 @@ const SideNavBar = () => {
         ${isNavigating ? "pointer-events-none" : ""}`}
       >
         {NAV_ITEMS.map((item) => {
-          const active = activeHref === item.href;
+          const active =
+            item.href === "/"
+              ? activeHref === item.href
+              : activeHref.startsWith(item.href);
 
           return (
             <button

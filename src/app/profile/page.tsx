@@ -1,3 +1,5 @@
+import { ProfilPage } from "@/pageContainer";
+
 export default function Profile() {
-  return <>프로필 페이지</>;
+  return <ProfilPage />;
 }

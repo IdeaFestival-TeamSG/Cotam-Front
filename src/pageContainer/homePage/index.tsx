@@ -46,13 +46,13 @@ const HomePage = () => {
             </p>
           </div>
           <div>
-            <p className="text-sm">
-              <p className="text-sm text-[#42C290] p-0">
+            <div className="text-sm">
+              <div className="text-sm text-[#42C290] p-0">
                 실행 속도, 정확성, 효율성
-              </p>
+              </div>
               저희 코탐은 이 세 가지 기준으로 개발자를 평가합니다. 코탐과 함께
               여러가지 사건을 해결해보세요.
-            </p>
+            </div>
           </div>
         </div>
       </div>
