@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import TanStackProvider from "@/lib/tanstackQueryProvider";
+import SideNavBar from "@/components/SideNavBar";
+import TanStackProvider from "@/utils/tanstackQueryProvider";
 import ThemeInitializer from "./ThemeInitializer";
 
 export const metadata: Metadata = {
@@ -17,7 +18,12 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <ThemeInitializer />
-        <TanStackProvider>{children}</TanStackProvider>
+        <TanStackProvider>
+          <div className="absolute">
+            <SideNavBar />
+          </div>
+          {children}
+        </TanStackProvider>
       </body>
     </html>
   );
