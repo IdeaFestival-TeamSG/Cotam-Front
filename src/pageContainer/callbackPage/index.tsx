@@ -36,7 +36,9 @@ const CallbackPage = () => {
       try {
         // TODO: 실제 API 엔드포인트로 변경 필요
         // 일반적으로 /auth/callback 또는 /auth/github/callback 같은 엔드포인트
-        const response = await post<AuthResponse>(`/auth/exchange${code}`);
+        const response = await post<AuthResponse>(
+          `/auth/exchange?code=${code}`,
+        );
 
         // 토큰을 쿠키에 저장
         document.cookie = `accessToken=${response.accessToken.token}; path=/;`;
