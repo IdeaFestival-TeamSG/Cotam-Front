@@ -5,8 +5,14 @@ import { useEffect, useState } from "react";
 import { cn, post } from "@/lib";
 
 type AuthResponse = {
-  accessToken: string;
-  refreshToken: string;
+  accessToken: {
+    token: string;
+    expiration: string;
+  };
+  refreshToken: {
+    token: string;
+    expiration: string;
+  };
 };
 
 const CallbackPage = () => {
@@ -30,13 +36,11 @@ const CallbackPage = () => {
       try {
         // TODO: 실제 API 엔드포인트로 변경 필요
         // 일반적으로 /auth/callback 또는 /auth/github/callback 같은 엔드포인트
-        const response = await post<AuthResponse>("/auth/callback", {
-          code,
-        });
+        const response = await post<AuthResponse>(`/auth/exchange${code}`);
 
         // 토큰을 쿠키에 저장
-        document.cookie = `accessToken=${response.accessToken}; path=/;`;
-        document.cookie = `refreshToken=${response.refreshToken}; path=/;`;
+        document.cookie = `accessToken=${response.accessToken.token}; path=/;`;
+        document.cookie = `refreshToken=${response.refreshToken.token}; path=/;`;
 
         setStatus("success");
 
