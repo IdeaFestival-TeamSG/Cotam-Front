@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Plus from "@/assets/Plus";
 import { ProblemComponent, ProblemFilterIcon } from "@/components";
 import { cn, get } from "@/lib";
-import { ProblemComponentType, type ProblemResponseType } from "@/types"
+import { ProblemComponentType, ProblemDifficultType, type ProblemResponseType } from "@/types"
 
 
 
@@ -17,7 +17,13 @@ const ProblemPage = () => {
   const router = useRouter();
 
   const filterArray = ["최신", "인기", "즐겨찾기"];
-  const filterArrayDifficult = ["기초", "쉬움", "보통", "어려움", "탐정(극한)"];
+  const filterArrayDifficult: {title: string; difficult: ProblemDifficultType}[] = [
+  { title: "기초", difficult: "BASIC" },
+  { title: "쉬움", difficult: "EASY" },
+  { title: "보통", difficult: "NORMAL" },
+  { title: "어려움", difficult: "HARD" },
+  { title: "탐정(극한)", difficult: "DETECTIVE" },
+];
 
   const getProblems = async () => {
     const response = await get<{
@@ -68,9 +74,9 @@ const ProblemPage = () => {
               <div className="flex gap-1">
                 {filterArrayDifficult.map((x) => (
                   <ProblemFilterIcon
-                    key={x}
-                    text={x}
-                    isChecked={selectedFilter.includes(x)}
+                    key={x.title}
+                    text={x.title}
+                    isChecked={selectedFilter.includes(x.title)}
                     setChecked={setSelectedFilter}
                   />
                 ))}

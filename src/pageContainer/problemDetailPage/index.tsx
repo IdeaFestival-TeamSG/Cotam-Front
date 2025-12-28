@@ -16,10 +16,11 @@ import GreenStar from "@/assets/GreenStar";
 import { DifficultyLevel } from "@/components";
 import { cn } from "@/lib";
 import type { ProblemResponseType, ProblemStatusType } from "@/types";
+import { get } from "@/lib";
 
 const ProblemDetailPage = () => {
   const params = useParams();
-  const problemId = params?.id as string;
+  const problemId = Number(params?.id);
   const router = useRouter();
   const [problem, setProblem] = useState<ProblemResponseType | null>(null);
   const [loading, setLoading] = useState(false);
@@ -95,16 +96,9 @@ console.log(result);
     const fetchProblem = async () => {
       try {
         // TODO: 실제 API 엔드포인트로 변경 필요
-        // const data = await get<ProblemResponseType>(`/problem/${problemId}`);
-        // setProblem(data);
+        const data = await get(`/problem/${problemId}`);
+        setProblem(data.data.content);
 
-        // 임시 데이터
-        setProblem({
-          pendingProblemId: problemId,
-          title: "두 수의 합 구하기",
-          description: "a와 b를 더한 c를 반환하시오",
-          status: "PENDING",
-        });
         setLoading(false);
       } catch (error) {
         console.error("문제를 불러오는 중 오류 발생:", error);
