@@ -1,9 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Plus from "@/assets/Plus";
 import { ProblemComponent, ProblemFilterIcon } from "@/components";
 import { cn } from "@/lib";
-import { ProblemComponentType, ProblemResponseType } from "@/types";
+import { ProblemComponentType, type ProblemResponseType } from "@/types";
 
 const ProblemPage = () => {
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
@@ -51,7 +52,7 @@ const ProblemPage = () => {
   return (
     <div
       className={cn(
-        "w-screen h-screen flex justify-center items-center pl-50 gap-40",
+        "w-screen h-screen flex justify-center items-center pl-40 gap-40",
       )}
     >
       <div className="w-[67.387rem] h-[38.125rem] flex flex-col pt-[2.63rem] gap-8">
@@ -68,27 +69,36 @@ const ProblemPage = () => {
           님, 수사를 시작해봐요!
         </h1>
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <div className="flex gap-1">
-              {filterArray.map((x) => (
-                <ProblemFilterIcon
-                  key={x}
-                  text={x}
-                  isChecked={selectedFilter.includes(x)}
-                  setChecked={setSelectedFilter}
-                />
-              ))}
+          <div className="flex justify-between">
+            <div>
+              <div className="flex gap-1">
+                {filterArray.map((x) => (
+                  <ProblemFilterIcon
+                    key={x}
+                    text={x}
+                    isChecked={selectedFilter.includes(x)}
+                    setChecked={setSelectedFilter}
+                  />
+                ))}
+              </div>
+              <div className="flex gap-1">
+                {filterArrayDifficult.map((x) => (
+                  <ProblemFilterIcon
+                    key={x}
+                    text={x}
+                    isChecked={selectedFilter.includes(x)}
+                    setChecked={setSelectedFilter}
+                  />
+                ))}
+              </div>
             </div>
-            <div className="flex gap-1">
-              {filterArrayDifficult.map((x) => (
-                <ProblemFilterIcon
-                  key={x}
-                  text={x}
-                  isChecked={selectedFilter.includes(x)}
-                  setChecked={setSelectedFilter}
-                />
-              ))}
-            </div>
+            <button
+              type="button"
+              className="flex items-end cursor-pointer"
+              onClick={() => router.push("/postProblem")}
+            >
+              <Plus />
+            </button>
           </div>
           <div className="flex gap-3">
             <div className="flex flex-col gap-3">

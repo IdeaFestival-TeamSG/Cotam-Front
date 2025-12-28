@@ -34,11 +34,11 @@ const CallbackPage = () => {
       }
 
       try {
-        // TODO: 실제 API 엔드포인트로 변경 필요
-        // 일반적으로 /auth/callback 또는 /auth/github/callback 같은 엔드포인트
         const response = await post<AuthResponse>(
           `/auth/exchange?code=${code}`,
         );
+
+        console.log(response);
 
         // 토큰을 쿠키에 저장
         document.cookie = `accessToken=${response.accessToken.token}; path=/;`;
@@ -46,7 +46,6 @@ const CallbackPage = () => {
 
         setStatus("success");
 
-        // 성공 시 프로필 페이지로 리다이렉트
         setTimeout(() => {
           router.push("/profile");
         }, 1000);
@@ -65,7 +64,7 @@ const CallbackPage = () => {
   return (
     <div
       className={cn(
-        "w-screen h-screen flex justify-center items-center pl-50 gap-40",
+        "w-screen h-screen flex justify-center items-center pl-40 gap-40",
       )}
     >
       <div className="flex flex-col gap-4 items-center">

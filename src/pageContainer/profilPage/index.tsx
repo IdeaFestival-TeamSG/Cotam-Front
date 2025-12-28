@@ -25,7 +25,7 @@ const ProfilPage = () => {
     return (
       <div
         className={cn(
-          "w-screen h-screen flex justify-center items-center pl-50 gap-40",
+          "w-screen h-screen flex justify-center items-center pl-40 gap-40",
         )}
       >
         <div className="flex flex-col gap-6 items-center">
@@ -45,7 +45,7 @@ const ProfilPage = () => {
   return (
     <div
       className={cn(
-        "w-screen h-screen flex justify-center items-center pl-50 gap-40",
+        "w-screen h-screen flex justify-center items-center pl-40 gap-40",
       )}
     ></div>
   );
