@@ -92,7 +92,7 @@ const ProblemPage = () => {
           </div>
           <div className="flex gap-3">
             <div className="flex flex-col gap-3">
-              {problems.map((problem, index) => {
+              {problems.slice(0, 6).map((problem, index) => {
                 return (
                   <ProblemComponent
                     key={problem.problemId}
@@ -106,7 +106,7 @@ const ProblemPage = () => {
               })}
             </div>
             <div className="flex flex-col gap-3">
-              {problems.map((problem, index) => {
+              {problems.slice(6, 10).map((problem, index) => {
                 return (
                   <ProblemComponent
                     key={problem.problemId}
