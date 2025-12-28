@@ -41,65 +41,7 @@ const ProblemDetailPage = () => {
 
   const tags = ["정답률 62.7%", "보통난이도", "즐겨찾기"];
 
-  const description =
-    "정수 배열과 목표값이 주어집니다.\n배열에서 서로 다른 두 수를 선택해 합이 목표값이 되는지 찾습니다.\n각 원소는 한 번만 사용할 수 있습니다.\n조건을 만족하는 두 수의 인덱스 또는 존재 여부를 반환합니다.\n효율적인 탐색을 위해 해시맵 등의 자료구조를 활용할 수 있습니다.\n효율적인 탐색을 위해 해시맵 등의 자료구조를 활용할 수 있습니다.\n효율적인 탐색을 위해 해시맵 등의 자료구조를 활용할 수 있습니다.\n효율적인 탐색을 위해 해시맵 등의 자료구조를 활용할 수 있습니다.\n효율적인 탐색을 위해 해시맵 등의 자료구조를 활용할 수 있습니다.\n효율적인 탐색을 위해 해시맵 등의 자료구조를 활용할 수 있습니다.\n효율적인 탐색을 위해 해시맵 등의 자료구조를 활용할 수 있습니다.\n효율적인 탐색을 위해 해시맵 등의 자료구조를 활용할 수 있습니다.";
-
-  const code1 = `
-    /**
-     * 두 수의 합을 구하는 함수
-     * @param {number} a
-     * @param {number} b
-     * @returns {number}
-     */
-    function sum(a, b) {
-      // 타입 체크
-      if (typeof a !== "number" || typeof b !== "number") {
-        throw new Error("매개변수는 숫자여야 합니다.");
-      }
-    
-      return a + b;
-    }
-    
-    /**
-     * 배열의 모든 요소를 더하는 함수
-     * @param {number[]} numbers
-     * @returns {number}
-     */
-    function sumArray(numbers) {
-      if (!Array.isArray(numbers)) {
-        throw new Error("배열을 전달해야 합니다.");
-      }
-    
-      return numbers.reduce((acc, cur) => acc + cur, 0);
-    }
-    
-    // 단일 값 계산
-    const result = sum(3, 5);
-    console.log("두 수의 합:", result);
-    
-    // 배열 합 계산
-    const values = [1, 2, 3, 4, 5];
-    const total = sumArray(values);
-    console.log("배열의 합:", total);
-    
-    // 예외 처리 테스트
-    try {
-      sum("3", 5);
-    } catch (error) {
-      console.error("에러 발생:", error.message);
-    }
-    `;
-
-  const code2 = `
-function sum(a, b) {
-  return a + b;
-}
-
-const result = sum(3, 5);
-console.log(result);
-`;
-
-  const [writeCode, setWriteCode] = useState<string>(code2);
+  const [writeCode, setWriteCode] = useState<string>('');
 
   const language: "c" | "javascript" | "python" = "javascript";
 
@@ -124,7 +66,7 @@ console.log(result);
   }, [problemId]);
 
   const highlightedCode = Prism.highlight(
-    code2,
+    writeCode,
     Prism.languages[language],
     language,
   );
@@ -199,7 +141,7 @@ console.log(result);
                 </div>
                 <div className="flex gap-[0.7rem]">
                   <div className="text-[2.25rem] not-italic font-extrabold leading-[140%] w-[20rem]">
-                    비동기 오류처리
+                    {problem.title}
                   </div>
                   <div className="flex items-center justify-center">
                     <DifficultyLevel difficult="BASIC" />
@@ -240,7 +182,7 @@ console.log(result);
               style={{ whiteSpace: "pre-line" }}
               className="mt-6 max-h-[8rem] overflow-y-auto overflow-x-auto p-4"
             >
-              {description}
+              {problem.description}
             </p>
             <pre className="mt-6 max-h-[17.44rem] overflow-y-auto overflow-x-auto rounded-lg text-sm bg-[#0f172a] p-4 whitespace-pre">
               <code
@@ -323,7 +265,7 @@ console.log(result);
                 width="100%"
                 height="100%"
                 language="javascript"
-                original={code2}
+                original={}
                 modified={writeCode.trim()}
                 theme="vs-dark"
                 options={{
