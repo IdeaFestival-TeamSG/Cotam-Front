@@ -45,6 +45,16 @@ const ProblemDetailPage = () => {
 
   const language: "c" | "javascript" | "python" = "javascript";
 
+  const exampleJSCode = `
+    function add(a, b) {
+      return a + b;
+    }
+
+    const result = add(3, 5);
+    console.log(result); // 8
+
+  `
+
   useEffect(() => {
     const fetchProblem = async () => {
       try {
@@ -265,7 +275,7 @@ const ProblemDetailPage = () => {
                 width="100%"
                 height="100%"
                 language="javascript"
-                original={}
+                original={exampleJSCode}
                 modified={writeCode.trim()}
                 theme="vs-dark"
                 options={{
