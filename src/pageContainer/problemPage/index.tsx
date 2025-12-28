@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import Plus from "@/assets/Plus";
 import { ProblemComponent, ProblemFilterIcon } from "@/components";
 import { cn, get } from "@/lib";
-import { ProblemComponentType, type ProblemResponseType } from "@/types";
+import { ProblemComponentType, type ProblemResponseType } from "@/types"
+
+
 
 const ProblemPage = () => {
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
-  const [problems, setProblems] = useState<[]>([]);
+  const [problems, setProblems] = useState<ProblemResponseType[]>([]);
 
   const nickName = "오리너구리";
 
@@ -19,45 +21,13 @@ const ProblemPage = () => {
 
   const getProblems = async () => {
     const response = await get("/problem");
-    console.log(response);
+    console.log(response.data.content);
+    setProblems(response.data.content)
   };
 
   useEffect(() => {
     getProblems();
   }, []);
-
-  const exampleProblem: ProblemResponseType[] = [
-    {
-      pendingProblemId: 42,
-      title: "두 수의 합",
-      description: "a와 b를 더한 c를 반환하시오",
-      status: "PENDING",
-    },
-    {
-      pendingProblemId: 42,
-      title: "두 수의 합 구하기",
-      description: "a와 b를 더한 c를 반환하시오",
-      status: "PENDING",
-    },
-    {
-      pendingProblemId: 42,
-      title: "두 수의 합 구하기",
-      description: "a와 b를 더한 c를 반환하시오",
-      status: "SOLVED",
-    },
-    {
-      pendingProblemId: 42,
-      title: "두 수의 합 구하기",
-      description: "a와 b를 더한 c를 반환하시오",
-      status: "SOLVED",
-    },
-    {
-      pendingProblemId: 42,
-      title: "두 수의 합 구하기",
-      description: "a와 b를 더한 c를 반환하시오",
-      status: "YET",
-    },
-  ];
 
   return (
     <div
@@ -112,28 +82,28 @@ const ProblemPage = () => {
           </div>
           <div className="flex gap-3">
             <div className="flex flex-col gap-3">
-              {exampleProblem.map((problem, index) => {
+              {problems.map((problem, index) => {
                 return (
                   <ProblemComponent
                     title={problem.title}
                     description={problem.description!}
                     status={problem.status!}
                     place={"profil"}
-                    pendingProblemId={problem.pendingProblemId}
+                    pendingProblemId={problem.problemId}
                     key={index}
                   />
                 );
               })}
             </div>
             <div className="flex flex-col gap-3">
-              {exampleProblem.map((problem, index) => {
+              {problems.map((problem, index) => {
                 return (
                   <ProblemComponent
                     title={problem.title}
                     description={problem.description!}
                     status={problem.status!}
                     place={"profil"}
-                    pendingProblemId={problem.pendingProblemId}
+                    pendingProblemId={problem.problemId}
                     key={index}
                   />
                 );

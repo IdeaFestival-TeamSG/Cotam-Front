@@ -1,6 +1,6 @@
 import type { ProblemDifficultType } from "@/types";
 
-type DifficultLevelProps = {
+export type DifficultLevelProps = {
   difficult: ProblemDifficultType;
 };
 

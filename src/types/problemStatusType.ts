@@ -1,12 +1,16 @@
 import z from "zod";
+import { ProblemDifficultType } from ".";
 
 export type ProblemStatusType = "PENDING" | "SOLVED" | "YET";
 
 export type ProblemResponseType = {
-  pendingProblemId?: string | number;
+    problemId: number;
   title: string;
   status?: ProblemStatusType;
   description?: string;
+  solveCount: number;
+  submitCount:  number
+  difficulty: ProblemDifficultType;
 };
 
 export type ProblemComponentType = {
