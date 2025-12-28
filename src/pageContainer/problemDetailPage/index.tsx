@@ -41,8 +41,6 @@ const ProblemDetailPage = () => {
 
   const tags = ["정답률 62.7%", "보통난이도", "즐겨찾기"];
 
-  const [writeCode, setWriteCode] = useState<string>('');
-
   const language: "c" | "javascript" | "python" = "javascript";
 
   const exampleJSCode = `
@@ -55,6 +53,8 @@ const ProblemDetailPage = () => {
 
   `
 
+
+  const [writeCode, setWriteCode] = useState<string>(exampleJSCode);
   useEffect(() => {
     const fetchProblem = async () => {
       try {
