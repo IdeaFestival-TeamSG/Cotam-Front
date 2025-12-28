@@ -22,7 +22,7 @@ const ProblemDetailPage = () => {
   const params = useParams();
   const problemId = Number(params?.id);
   const router = useRouter();
-  const [problem, setProblem] = useState<ProblemResponseType | null>(null);
+  const [problem, setProblem] = useState<ProblemResponseType[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [showDiffModal, setShowDiffModal] = useState(false);
 
@@ -96,7 +96,7 @@ console.log(result);
     const fetchProblem = async () => {
       try {
         // TODO: 실제 API 엔드포인트로 변경 필요
-        const response = await get<{content: ProblemResponseType[]}>(`/problem/${problemId}`);
+        const response = await get<{data: {content: ProblemResponseType[]}}>(`/problem/${problemId}`);
         setProblem(response.data.content);
 
         setLoading(false);
