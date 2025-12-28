@@ -5,13 +5,15 @@ import { useEffect, useState } from "react";
 import { cn, post } from "@/lib";
 
 type AuthResponse = {
-  accessToken: {
-    token: string;
-    expiration: string;
-  };
-  refreshToken: {
-    token: string;
-    expiration: string;
+  data: {
+    accessToken: {
+      token: string;
+      expiration: string;
+    };
+    refreshToken: {
+      token: string;
+      expiration: string;
+    };
   };
 };
 
@@ -41,8 +43,8 @@ const CallbackPage = () => {
         console.log(response);
 
         // 토큰을 쿠키에 저장
-        document.cookie = `accessToken=${response.accessToken.token}; path=/;`;
-        document.cookie = `refreshToken=${response.refreshToken.token}; path=/;`;
+        document.cookie = `accessToken=${response.data.accessToken.token}; path=/;`;
+        document.cookie = `refreshToken=${response.data.refreshToken.token}; path=/;`;
 
         setStatus("success");
 
