@@ -5,7 +5,7 @@ import GreenStar from "@/assets/GreenStar";
 import { DifficultyLevel } from "@/components";
 import { cn } from "@/lib";
 import { get } from "@/lib/api/http";
-import { ProblemResponseType, ProblemStatusType } from "@/types";
+import type { ProblemResponseType, ProblemStatusType } from "@/types";
 
 const ProblemDetailPage = () => {
   const params = useParams();
@@ -80,6 +80,7 @@ const ProblemDetailPage = () => {
         <div className="flex flex-col gap-4 items-center">
           <p>문제를 찾을 수 없습니다.</p>
           <button
+            type="button"
             onClick={() => router.push("/problem")}
             className="px-4 py-2 bg-[#32AB7B] text-white rounded"
           >
