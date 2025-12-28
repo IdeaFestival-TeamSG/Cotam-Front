@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { post } from "@/lib";
+import { cn, post } from "@/lib";
 
 type AuthResponse = {
   accessToken: string;
