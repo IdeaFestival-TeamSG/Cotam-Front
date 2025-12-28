@@ -11,7 +11,7 @@ const HomePage = () => {
   return (
     <div
       className={cn(
-        "w-screen h-screen flex justify-center items-center pl-50 gap-40",
+        "w-screen h-screen flex justify-center items-center pl-40 gap-40",
       )}
     >
       <div className="h-[38.125rem] w-[25.75rem] flex flex-col gap-[14.25rem] pt-[2.63rem]">

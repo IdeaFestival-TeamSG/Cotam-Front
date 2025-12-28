@@ -68,7 +68,10 @@ const SideNavBar = () => {
           const active =
             item.href === "/"
               ? activeHref === item.href
-              : activeHref.startsWith(item.href);
+              : item.href === "/problem"
+                ? activeHref.startsWith(item.href) ||
+                  activeHref.startsWith("/postProblem")
+                : activeHref.startsWith(item.href);
 
           return (
             <button

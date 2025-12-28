@@ -1,4 +1,4 @@
-import { ProblemDifficultType } from "@/types";
+import type { ProblemDifficultType } from "@/types";
 
 type DifficultLevelProps = {
   difficult: ProblemDifficultType;
@@ -22,7 +22,7 @@ const DifficultLevel = ({ difficult }: DifficultLevelProps) => {
     }
   };
   return (
-    <div className="px-3 py-2 border border-solid border-black rounded-4xl flex align-center justify-center">
+    <div className="px-3 py-1 border border-solid border-black rounded-3xl flex items-center justify-center h-[1.875rem]">
       {getDifficultText(difficult)}
     </div>
   );
