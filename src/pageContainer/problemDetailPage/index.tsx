@@ -96,8 +96,8 @@ console.log(result);
     const fetchProblem = async () => {
       try {
         // TODO: 실제 API 엔드포인트로 변경 필요
-        const data = await get(`/problem/${problemId}`);
-        setProblem(data.data.content);
+        const response = await get<{content: ProblemResponseType[]}>(`/problem/${problemId}`);
+        setProblem(response.data.content);
 
         setLoading(false);
       } catch (error) {
