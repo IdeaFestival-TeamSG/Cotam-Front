@@ -3,11 +3,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Plus from "@/assets/Plus";
 import { ProblemComponent, ProblemFilterIcon } from "@/components";
-import { cn } from "@/lib";
+import { cn, get } from "@/lib";
 import { ProblemComponentType, type ProblemResponseType } from "@/types";
 
 const ProblemPage = () => {
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
+  const [problems, setProblems] = useState<[]>([]);
 
   const nickName = "오리너구리";
 
@@ -15,6 +16,16 @@ const ProblemPage = () => {
 
   const filterArray = ["최신", "인기", "즐겨찾기"];
   const filterArrayDifficult = ["기초", "쉬움", "보통", "어려움", "탐정(극한)"];
+
+  const getProblems = async () => {
+    const response = await get("/problem");
+    console.log(response);
+    setProblems(response);
+  };
+
+  useEffect(() => {
+    getProblems();
+  }, []);
 
   const exampleProblem: ProblemResponseType[] = [
     {
