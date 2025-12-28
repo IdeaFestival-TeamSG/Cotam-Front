@@ -1,3 +1,4 @@
+export { default as CallbackPage } from "./callbackPage";
 export { default as HomePage } from "./homePage";
 export { default as NotFoundPage } from "./notFoundPage";
 export { default as ProblemDetailPage } from "./problemDetailPage";

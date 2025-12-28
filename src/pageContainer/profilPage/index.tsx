@@ -31,6 +31,7 @@ const ProfilPage = () => {
         <div className="flex flex-col gap-6 items-center">
           <p className="text-2xl font-semibold">로그인</p>
           <button
+            type="button"
             onClick={handleGitHubLogin}
             className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
           >
