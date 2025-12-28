@@ -20,7 +20,6 @@ const ProblemPage = () => {
   const getProblems = async () => {
     const response = await get("/problem");
     console.log(response);
-    setProblems(response);
   };
 
   useEffect(() => {
