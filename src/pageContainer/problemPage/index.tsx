@@ -20,9 +20,13 @@ const ProblemPage = () => {
   const filterArrayDifficult = ["기초", "쉬움", "보통", "어려움", "탐정(극한)"];
 
   const getProblems = async () => {
-    const response = await get("/problem");
+    const response = await get<{
+      data: {
+        content: ProblemResponseType[];
+      };
+    }>("/problem");
     console.log(response.data.content);
-    setProblems(response.data.content)
+    setProblems(response.data.content);
   };
 
   useEffect(() => {
@@ -85,12 +89,12 @@ const ProblemPage = () => {
               {problems.map((problem, index) => {
                 return (
                   <ProblemComponent
+                    key={problem.problemId}
+                    problemId={problem.problemId}
                     title={problem.title}
-                    description={problem.description!}
-                    status={problem.status!}
-                    place={"profil"}
-                    pendingProblemId={problem.problemId}
-                    key={index}
+                    description={problem.description}
+                    difficulty={problem.difficulty}
+                    place={"problem"}
                   />
                 );
               })}
@@ -99,12 +103,12 @@ const ProblemPage = () => {
               {problems.map((problem, index) => {
                 return (
                   <ProblemComponent
+                    key={problem.problemId}
+                    problemId={problem.problemId}
                     title={problem.title}
-                    description={problem.description!}
-                    status={problem.status!}
-                    place={"profil"}
-                    pendingProblemId={problem.problemId}
-                    key={index}
+                    description={problem.description}
+                    difficulty={problem.difficulty}
+                    place={"problem"}
                   />
                 );
               })}

@@ -14,9 +14,9 @@ export type ProblemResponseType = {
 };
 
 export type ProblemComponentType = {
-  pendingProblemId?: string | number;
+  problemId: number;
   title: string;
-  status?: ProblemStatusType;
+  difficulty: ProblemDifficultType;
   description?: string;
   place: "problem" | "profil";
 };
