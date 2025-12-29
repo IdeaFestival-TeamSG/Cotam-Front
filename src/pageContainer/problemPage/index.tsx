@@ -132,6 +132,7 @@ const ProblemPage = () => {
                     title={problem.title}
                     description={`${problem.submitCount > 0 ? ((problem.solveCount / problem.submitCount) * 100).toFixed(2) : "0.00"}%`}
                     difficulty={problem.difficulty}
+                    solved={problem.solved}
                     place={"problem"}
                   />
                 );
@@ -146,6 +147,7 @@ const ProblemPage = () => {
                     title={problem.title}
                     description={`${problem.submitCount > 0 ? ((problem.solveCount / problem.submitCount) * 100).toFixed(2) : "0.00"}%`}
                     difficulty={problem.difficulty}
+                    solved={problem.solved}
                     place={"problem"}
                   />
                 );

@@ -78,7 +78,7 @@ const ProfilPage = () => {
         "w-screen h-screen flex justify-center items-center pl-40 gap-40",
       )}
     >
-      {user && (
+      {user ? (
         <div className="flex flex-col items-center gap-4">
           <img
             src={user.profileImageUrl}
@@ -95,7 +95,17 @@ const ProfilPage = () => {
             로그아웃
           </button>
         </div>
-      )}
+      ) : (
+        <div className="flex flex-col gap-6 items-center">
+          <p className="text-2xl font-semibold">유저를 찾을 수 없습니다.</p>
+          <button
+            type="button"
+            onClick={handleGitHubLogin}
+            className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+          >
+            GitHub로 로그인
+          </button>
+        </div>)}
     </div>
   );
 };

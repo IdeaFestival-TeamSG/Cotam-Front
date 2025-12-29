@@ -11,6 +11,7 @@ export type ProblemResponseType = {
   solveCount: number;
   submitCount:  number
   difficulty: ProblemDifficultType;
+  solved: boolean;
 };
 
 export type ProblemComponentType = {
@@ -19,6 +20,7 @@ export type ProblemComponentType = {
   difficulty: ProblemDifficultType;
   description?: string;
   place: "problem" | "profil";
+  solved: boolean;
 };
 
 export type ProblemComponentProps = ProblemComponentType;

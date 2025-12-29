@@ -8,6 +8,7 @@ const ProblemComponent = ({
   description,
   difficulty,
   place,
+  solved
 }: ProblemComponentProps) => {
   const router = useRouter();
 
@@ -21,7 +22,11 @@ const ProblemComponent = ({
       </div>
       <div className="flex justify-between w-full items-center">
         <p className="text-[#717872]">{description}</p>
-         <DifficultyLevel difficult={difficulty} />
+        <div>
+        {place === "profil" && (
+          <p className={`text-[#717872] ${solved ? "text-[#32AB7B]" : "text-[#FF5555]"}`}>{solved ? "해결" : "미해결"}</p>
+        )}
+        <DifficultyLevel difficult={difficulty} /></div>
       </div>
     </div>
   );
