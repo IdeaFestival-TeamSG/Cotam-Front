@@ -11,11 +11,11 @@ const DifficultLevel = ({ difficult }: DifficultLevelProps) => {
         return "기초";
       case "EASY":
         return "쉬움";
-      case "NORMAL":
+      case "MEDIUM":
         return "보통";
       case "HARD":
         return "어려움";
-      case "DETECTIVE":
+      case "EXPERT":
         return "탐정(극한)";
       default:
         return difficult;
