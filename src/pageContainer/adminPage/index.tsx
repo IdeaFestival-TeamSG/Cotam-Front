@@ -6,7 +6,7 @@ import { get } from "@/lib/api/http";
 import { cn } from "@/lib";
 
 type PendingProblemSummary = {
-  pendingProblemId: number;
+  id: number;
   title: string;
   status: string;
 };
@@ -70,17 +70,17 @@ const AdminPage = () => {
               ) : (
                 problems.map((problem) => (
                   <div
-                    key={problem.pendingProblemId}
+                    key={problem.id}
                     onClick={() =>
                       router.push(
-                        `/admin/problem?id=${problem.pendingProblemId}`
+                        `/admin/problem?id=${problem.id}`
                       )
                     }
                     className="flex items-center justify-between p-6 border border-gray-200 rounded-xl cursor-pointer hover:border-[#CF4646] hover:shadow-md transition-all bg-white"
                   >
                     <div className="flex flex-col gap-2">
                       <span className="text-sm text-gray-400 font-medium">
-                        ID: {problem.pendingProblemId}
+                        ID: {problem.id}
                       </span>
                       <h3 className="text-xl font-bold text-black">
                         {problem.title}
