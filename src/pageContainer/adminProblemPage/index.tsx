@@ -14,13 +14,13 @@ type TestCase = {
 };
 
 type PendingProblemDetail = {
-  pendingProblemId: number;
+  id: number;
   title: string;
   description: string;
   difficulty: ProblemDifficultType;
   status: string;
-  rejectReason?: string;
-  testCases: TestCase[];
+  rejectReason: string | null;
+  pendingTestCases: TestCase[];
 };
 
 const AdminProblemPage = () => {
@@ -69,7 +69,7 @@ const AdminProblemPage = () => {
     if (!confirm("이 문제를 승인하시겠습니까?")) return;
 
     try {
-      await post(`/admin/pending-problem/${problem.pendingProblemId}/approve`, {});
+      await post(`/admin/pending-problem/${problem.id}/approve`, {});
       setAlert({
         visible: true,
         header: "성공",
@@ -90,7 +90,7 @@ const AdminProblemPage = () => {
     if (!problem || !rejectReason.trim()) return;
 
     try {
-      await post(`/admin/pending-problem/${problem.pendingProblemId}/reject`, {
+      await post(`/admin/pending-problem/${problem.id}/reject`, {
         reason: rejectReason,
       });
       setShowRejectModal(false);
@@ -212,7 +212,7 @@ const AdminProblemPage = () => {
                 테스트케이스
               </h2>
               <div className="flex flex-col gap-4">
-                {problem.testCases.map((tc, idx) => (
+                {problem.pendingTestCases.map((tc, idx) => (
                   <div
                     key={idx}
                     className="p-4 bg-gray-50 border border-gray-200 rounded-xl flex flex-col gap-2"
