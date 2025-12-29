@@ -103,17 +103,26 @@ const ProblemDetailPage = () => {
 
   const tags = ["정답률 62.7%", "보통난이도", "즐겨찾기"];
 
-  const language: "c" | "javascript" | "python" = "javascript";
+  const [language, setLanguage] = useState<"javascript" | "python">("javascript");
 
   const exampleJSCode = `
     function add() {
       return;
     }
+  `.trim();
 
+  const examplePythonCode = `
+def add():
+    return
   `.trim();
 
 
   const [writeCode, setWriteCode] = useState<string>(exampleJSCode);
+
+  useEffect(() => {
+    setWriteCode(language === "javascript" ? exampleJSCode : examplePythonCode);
+  }, [language]);
+
   useEffect(() => {
     const fetchProblem = async () => {
       try {
@@ -264,13 +273,30 @@ const ProblemDetailPage = () => {
 
         <div className="flex flex-col h-full">
           <div className="border rounded-2xl overflow-hidden">
-            <div className="px-4 py-2 bg-[#1e1e1e] border-b border-[#3e3e3e] ">
-              <p className="text-sm text-gray-400">JavaScript</p>
+            <div className="px-4 py-2 bg-[#1e1e1e] border-b border-[#3e3e3e] flex gap-2">
+              <button
+                className={cn(
+                  "text-sm cursor-pointer bg-transparent border-none p-0",
+                  language === "javascript" ? "text-white font-bold" : "text-gray-400"
+                )}
+                onClick={() => setLanguage("javascript")}
+              >
+                JavaScript
+              </button>
+              <button
+                className={cn(
+                  "text-sm cursor-pointer bg-transparent border-none p-0",
+                  language === "python" ? "text-white font-bold" : "text-gray-400"
+                )}
+                onClick={() => setLanguage("python")}
+              >
+                Python
+              </button>
             </div>
             <Editor
               width="37.762rem"
               height="30rem"
-              language="javascript"
+              language={language === "javascript" ? "javascript" : "python"}
               value={writeCode}
               onChange={(value) => setWriteCode(value!)}
               theme="vs-dark"
@@ -347,8 +373,8 @@ const ProblemDetailPage = () => {
               <DiffEditor
                 width="100%"
                 height="100%"
-                language="javascript"
-                original={exampleJSCode}
+                language={language === "javascript" ? "javascript" : "python"}
+                original={language === "javascript" ? exampleJSCode : examplePythonCode}
                 modified={writeCode.trim()}
                 theme="vs-dark"
                 options={{
