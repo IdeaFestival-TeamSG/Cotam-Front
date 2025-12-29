@@ -4,15 +4,68 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Arrow from "@/assets/Arrow";
 import { cn } from "@/lib";
+import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
+import { post } from "@/lib/api/http";
+import type { ProblemDifficultType } from "@/types";
+
+type TestCase = {
+  input: string;
+  expectedOutput: string;
+};
+
+type PostProblemForm = {
+  title: string;
+  description: string;
+  difficulty: ProblemDifficultType;
+  testCases: TestCase[];
+};
+
+const filterArrayDifficult: { title: string; difficult: ProblemDifficultType }[] = [
+  { title: "기초", difficult: "BASIC" },
+  { title: "쉬움", difficult: "EASY" },
+  { title: "보통", difficult: "NORMAL" },
+  { title: "어려움", difficult: "HARD" },
+  { title: "탐정(극한)", difficult: "DETECTIVE" },
+];
 
 const PostProblemPage = () => {
   const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [code, setCode] = useState("");
-  const [testCase, setTestCase] = useState("");
-
   const maxTitleLength = 18;
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<PostProblemForm>({
+    defaultValues: {
+      title: "",
+      description: "",
+      difficulty: "BASIC",
+      testCases: [{ input: "", expectedOutput: "" }],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "testCases",
+  });
+
+  const onSubmit: SubmitHandler<PostProblemForm> = async (data) => {
+    try {
+      await post("/pending-problem", data);
+      alert("사건 의뢰가 성공적으로 접수되었습니다.");
+      router.push("/problem");
+    } catch (error) {
+      console.error("사건 의뢰 실패:", error);
+      alert("사건 의뢰 중 오류가 발생했습니다.");
+    }
+  };
+
+  const selectedDifficulty = watch("difficulty");
+  const titleValue = watch("title");
 
   return (
     <div
@@ -20,7 +73,10 @@ const PostProblemPage = () => {
         "w-screen h-screen flex justify-center items-center pl-40 gap-40",
       )}
     >
-      <div className="w-[67.387rem] flex flex-col gap-6 h-[30rem]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-[67.387rem] flex flex-col gap-6 h-[30rem]"
+      >
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-[6px]">
@@ -43,8 +99,8 @@ const PostProblemPage = () => {
         </div>
 
         {/* Form */}
-        <div className="flex gap-6">
-          {/* Left Section: 제목, 본문 */}
+        <div className="flex gap-6 h-full overflow-y-auto pr-2 pb-4">
+          {/* Left Section: 제목, 본문, 난이도 */}
           <div className="flex-1 flex flex-col gap-6">
             {/* 제목 */}
             <div className="flex flex-col gap-2">
@@ -55,71 +111,103 @@ const PostProblemPage = () => {
                 <input
                   id="title"
                   type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="사건 제목을 입력해주세요."
                   maxLength={maxTitleLength}
+                  placeholder="사건 제목을 입력해주세요."
                   className="flex-1 px-4 py-2 border border-solid border-[#B0B5B0] rounded-lg outline-none focus:border-[#32AB7B]"
+                  {...register("title", { required: true })}
                 />
                 <span className="text-sm text-gray-500">
-                  {title.length}/{maxTitleLength}
+                  {titleValue?.length || 0}/{maxTitleLength}
                 </span>
               </div>
             </div>
 
-            {/* 본문 */}
+            {/* 난이도 */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="body" className="text-base font-semibold">
+              <label className="text-base font-semibold">난이도</label>
+              <div className="flex gap-2">
+                {filterArrayDifficult.map((item) => (
+                  <button
+                    key={item.difficult}
+                    type="button"
+                    onClick={() => setValue("difficulty", item.difficult)}
+                    className={cn(
+                      "px-4 py-2 rounded-lg text-sm font-medium transition-colors border",
+                      selectedDifficulty === item.difficult
+                        ? "bg-[#32AB7B] text-white border-[#32AB7B]"
+                        : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
+                    )}
+                  >
+                    {item.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 본문 */}
+            <div className="flex flex-col gap-2 flex-1">
+              <label htmlFor="description" className="text-base font-semibold">
                 본문
               </label>
               <textarea
-                id="body"
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
+                id="description"
                 placeholder="의뢰하고 싶은 문제 또는 의도적으로 잘못된 코드에 대한 설명을 넣어주세요."
-                className="w-full min-h-[400px] px-4 py-2 border border-solid border-[#B0B5B0] rounded-lg outline-none focus:border-[#32AB7B] resize-y"
+                className="w-full h-full min-h-[200px] px-4 py-2 border border-solid border-[#B0B5B0] rounded-lg outline-none focus:border-[#32AB7B] resize-none"
+                {...register("description", { required: true })}
               />
             </div>
           </div>
 
-          {/* Right Section: 관련 코드, 테스트케이스, 유의사항 */}
+          {/* Right Section: 테스트케이스, 유의사항 */}
           <div className="flex-1 flex flex-col gap-6">
-            {/* 관련 코드 */}
-            <div className="flex flex-col gap-2">
-              <label htmlFor="code" className="text-base font-semibold">
-                관련 코드(문제에 사용될 잘못된 코드)
-              </label>
-              <textarea
-                id="code"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                placeholder="의뢰하고 싶은 문제 또는 의도적으로 잘못된 코드에 대한 설명을 넣어주세요."
-                className="w-full min-h-[200px] px-4 py-2 border border-solid border-[#B0B5B0] rounded-lg outline-none focus:border-[#32AB7B] resize-y"
-              />
-            </div>
-
             {/* 테스트케이스 */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="testCase" className="text-base font-semibold">
-                테스트케이스
-              </label>
-              <textarea
-                id="testCase"
-                value={testCase}
-                onChange={(e) => setTestCase(e.target.value)}
-                placeholder="테스트케이스를 입력해주세요."
-                className="w-full min-h-[200px] px-4 py-2 border border-solid border-[#B0B5B0] rounded-lg outline-none focus:border-[#32AB7B] resize-y"
-              />
+              <div className="flex justify-between items-center">
+                <label className="text-base font-semibold">테스트케이스</label>
+                <button
+                  type="button"
+                  onClick={() => append({ input: "", expectedOutput: "" })}
+                  className="text-sm text-[#32AB7B] font-semibold hover:underline"
+                >
+                  + 케이스 추가
+                </button>
+              </div>
+              <div className="flex flex-col gap-3 max-h-[300px] overflow-y-auto pr-2">
+                {fields.map((field, index) => (
+                  <div key={field.id} className="flex gap-2 items-start p-3 border rounded-lg bg-gray-50 relative">
+                    <div className="flex-1 flex flex-col gap-2">
+                      <input
+                        placeholder="입력값 (예: 1 2)"
+                        className="px-3 py-1.5 border border-gray-300 rounded text-sm outline-none focus:border-[#32AB7B]"
+                        {...register(`testCases.${index}.input` as const, { required: true })}
+                      />
+                      <input
+                        placeholder="기대값 (예: 3)"
+                        className="px-3 py-1.5 border border-gray-300 rounded text-sm outline-none focus:border-[#32AB7B]"
+                        {...register(`testCases.${index}.expectedOutput` as const, { required: true })}
+                      />
+                    </div>
+                    {fields.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => remove(index)}
+                        className="text-gray-400 hover:text-red-500"
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* 유의사항 */}
             <div className="flex flex-col gap-2">
               <h2 className="text-base font-semibold">유의사항</h2>
-              <ul className="flex flex-col gap-2 text-sm text-gray-600 list-disc list-inside">
+              <ul className="flex flex-col gap-2 text-sm text-gray-600 list-disc list-inside bg-gray-50 p-4 rounded-lg">
                 <li>
                   의뢰한 사건은 이후 수정할 수 없습니다. 작성 중 페이지를 닫으면
-                  저장되지 않습니다. 따라서 개인 메모장, 노션 등에 완벽히 작성
-                  후, 복사 붙여넣기 하는 것을 권장드립니다.
+                  저장되지 않습니다.
                 </li>
                 <li>
                   의뢰한 사건은 관리진 측에서 검토 후, 이상이 없으면 문제해결
@@ -135,19 +223,19 @@ const PostProblemPage = () => {
                 </li>
               </ul>
             </div>
+            
+             {/* Submit Button */}
+            <div className="flex justify-end mt-auto">
+              <button
+                type="submit"
+                className="px-6 py-3 bg-[#48514C] text-white rounded-lg font-semibold hover:bg-[#3a413c] transition-colors w-full"
+              >
+                사건 의뢰하기
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* Submit Button */}
-        <div className="flex justify-end">
-          <button
-            type="button"
-            className="px-6 py-3 bg-[#48514C] text-white rounded-lg font-semibold hover:bg-[#3a413c] transition-colors"
-          >
-            사건 의뢰하기
-          </button>
-        </div>
-      </div>
+      </form>
     </div>
   );
 };
