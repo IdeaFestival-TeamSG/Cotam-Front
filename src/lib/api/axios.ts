@@ -2,8 +2,9 @@ import axios from "axios";
 import { getCookie } from "@/utils";
 
 type RefreshResponse = {
+  data: {
   accessToken: string;
-  refreshToken: string;
+  refreshToken: string;}
 };
 
 export const axiosInstance = axios.create({
@@ -68,12 +69,12 @@ axiosInstance.interceptors.response.use(
           },
         );
 
-        document.cookie = `accessToken=${response.accessToken}; path=/;`;
-        document.cookie = `refreshToken=${response.refreshToken}; path=/;`;
+        document.cookie = `accessToken=${response.data.accessToken}; path=/;`;
+        document.cookie = `refreshToken=${response.data.refreshToken}; path=/;`;
 
-        onTokenRefreshed(response.accessToken);
+        onTokenRefreshed(response.data.accessToken);
 
-        originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
 
         return axiosInstance(originalRequest);
       } catch (error) {
