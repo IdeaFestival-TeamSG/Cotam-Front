@@ -16,7 +16,7 @@ import GreenStar from "@/assets/GreenStar";
 import { DifficultyLevel } from "@/components";
 import { cn } from "@/lib";
 import type { ProblemResponseType, ProblemStatusType } from "@/types";
-import { get } from "@/lib";
+import { get, post } from "@/lib";
 
 type ProblemDetail = {
           problemId: number;
@@ -36,6 +36,10 @@ const ProblemDetailPage = () => {
   const [problem, setProblem] = useState<ProblemDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [showDiffModal, setShowDiffModal] = useState(false);
+  const [submitResultModal, setSubmitResultModal] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
 
   const [runResult, setRunResult] = useState<string>("");
 
@@ -97,7 +101,44 @@ const ProblemDetailPage = () => {
   };
   
   
-  
+
+
+  const handleSubmit = async () => {
+    if (!problemId) return;
+
+    try {
+      const response = await post<{
+        success: boolean;
+        code: string;
+        message: string;
+        data: {
+          submissionId: number;
+        };
+      }>("/submission", {
+        problemId: Number(problemId),
+        language: language.toUpperCase(),
+        sourceCode: writeCode,
+      });
+
+      if (response.success) {
+        setSubmitResultModal({
+          success: true,
+          message: response.message,
+        });
+      } else {
+        setSubmitResultModal({
+          success: false,
+          message: response.message || "제출에 실패했습니다.",
+        });
+      }
+    } catch (error) {
+      console.error("제출 중 오류 발생:", error);
+      setSubmitResultModal({
+        success: false,
+        message: "제출 중 오류가 발생했습니다.",
+      });
+    }
+  };
 
   const userName = "이상혁";
 
@@ -343,6 +384,7 @@ def add():
             </button>
             <button
               type="button"
+              onClick={handleSubmit}
               className="p-[8px] bg-black text-white cursor-pointer rounded-2xl text-base not-italic font-semibold leading-[100%] h-[2.25rem]"
             >
               답변 제출
@@ -385,6 +427,36 @@ def add():
                 }}
               />
             </div>
+          </div>
+        </div>
+      )}
+
+      {submitResultModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+          <div className="bg-[#1e1e1e] rounded-xl p-8 flex flex-col items-center gap-4 min-w-[300px]">
+            <div
+              className={cn(
+                "w-12 h-12 rounded-full flex items-center justify-center text-2xl",
+                submitResultModal.success ? "bg-green-500/20 text-green-500" : "bg-red-500/20 text-red-500"
+              )}
+            >
+              {submitResultModal.success ? "✓" : "!"}
+            </div>
+            <h3 className="text-xl font-bold text-white">
+              {submitResultModal.success ? "제출 성공" : "제출 실패"}
+            </h3>
+            <p className="text-gray-400 text-center">{submitResultModal.message}</p>
+            <button
+              onClick={() => setSubmitResultModal(null)}
+              className={cn(
+                "mt-4 px-6 py-2 rounded-lg font-semibold text-white transition-colors",
+                submitResultModal.success
+                  ? "bg-green-600 hover:bg-green-700"
+                  : "bg-red-600 hover:bg-red-700"
+              )}
+            >
+              확인
+            </button>
           </div>
         </div>
       )}
