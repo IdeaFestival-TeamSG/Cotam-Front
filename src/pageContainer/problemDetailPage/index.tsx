@@ -44,38 +44,57 @@ const ProblemDetailPage = () => {
     if (!problem) return;
   
     try {
-      // 1️⃣ 사용자 코드 실행 (add 함수 등록)
-      const fn = new Function(`${writeCode}; return typeof add === "function" ? add : null;`);
-      const addFn = fn();
+      // 1️⃣ 실행 전 전역 함수 목록
+      const beforeKeys = new Set(Object.keys(globalThis));
   
-      if (!addFn) {
-        setRunResult("❌ add(a, b) 함수가 정의되어 있지 않습니다.");
+      // 2️⃣ 사용자 코드 실행
+      new Function(writeCode)();
+  
+      // 3️⃣ 실행 후 새로 생긴 함수 찾기
+      const afterKeys = Object.keys(globalThis);
+  
+      const userFunctionKey = afterKeys.find(
+        (key) =>
+          !beforeKeys.has(key) &&
+          typeof (globalThis as any)[key] === "function",
+      );
+  
+      if (!userFunctionKey) {
+        setRunResult("❌ 함수가 선언되어 있지 않습니다.");
         return;
       }
   
-      // 2️⃣ 테스트케이스 검사
+      const userFn = (globalThis as any)[userFunctionKey] as Function;
+  
+      // 4️⃣ 테스트케이스 실행
       for (let i = 0; i < problem.testCases.length; i++) {
         const { input, expectedOutput } = problem.testCases[i];
   
-        // "3 5" → [3, 5]
-        const args = input.split(" ").map(Number);
+        const args = input.split(" ");
   
-        const result = addFn(...args);
+        const result = userFn(...args.slice(0, args.length));
   
         if (String(result) !== String(expectedOutput)) {
           setRunResult(
-            `❌ 실패 (테스트 ${i + 1})\n입력: ${input}\n기대값: ${expectedOutput}\n결과값: ${result}`,
+            `❌ 실패 (테스트 ${i + 1})\n` +
+              `함수명: ${userFunctionKey}\n` +
+              `입력: ${input}\n` +
+              `기대값: ${expectedOutput}\n` +
+              `결과값: ${result}`,
           );
           return;
         }
       }
   
-      // 3️⃣ 전부 통과
-      setRunResult("✅ 모든 테스트케이스 통과!");
+      // 5️⃣ 성공
+      setRunResult(
+        `✅ 모든 테스트케이스 통과!\n사용된 함수: ${userFunctionKey}`,
+      );
     } catch (error) {
       setRunResult(`❌ 실행 오류: ${String(error)}`);
     }
   };
+  
   
 
   const userName = "이상혁";
