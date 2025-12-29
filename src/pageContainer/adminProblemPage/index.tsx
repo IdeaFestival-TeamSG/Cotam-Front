@@ -147,7 +147,7 @@ const AdminProblemPage = () => {
               <DifficultyLevel difficult={problem.difficulty} />
               <span
                 className={cn(
-                  "px-3 py-1 text-xs rounded-full font-bold",
+                  "px-3 py-1 text-xs rounded-full font-bold flex justify-center items-center",
                   problem.status === "PENDING"
                     ? "bg-yellow-100 text-yellow-700"
                     : problem.status === "REJECTED"
