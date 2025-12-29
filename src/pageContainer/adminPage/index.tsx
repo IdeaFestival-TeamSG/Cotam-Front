@@ -29,7 +29,7 @@ const AdminPage = () => {
       setLoading(true);
       try {
         const response = await get<{ data: PendingProblemResponse }>(
-          `/admin/pending-problem?page=${currentPage}`
+          `/admin/pending-problem`
         );
         setProblems(response.data.content);
         setTotalPages(response.data.totalPages);
@@ -41,7 +41,7 @@ const AdminPage = () => {
     };
 
     fetchPendingProblems();
-  }, [currentPage]);
+  }, []);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
