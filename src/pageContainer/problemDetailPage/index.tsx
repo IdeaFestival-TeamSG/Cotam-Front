@@ -106,14 +106,11 @@ const ProblemDetailPage = () => {
   const language: "c" | "javascript" | "python" = "javascript";
 
   const exampleJSCode = `
-    function add(a, b) {
-      return a + b;
+    function add() {
+      return;
     }
 
-    const result = add(3, 5);
-    console.log(result); // 8
-
-  `
+  `.trim();
 
 
   const [writeCode, setWriteCode] = useState<string>(exampleJSCode);
