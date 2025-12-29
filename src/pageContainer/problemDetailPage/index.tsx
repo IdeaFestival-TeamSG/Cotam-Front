@@ -123,9 +123,9 @@ const ProblemDetailPage = () => {
         setTimeout(() => checkSubmissionStatus(submissionId), 5000);
       } else {
         setSubmitResultModal({
-          success: response.success,
+          success: response.data.status !== "FAILED",
           message:
-            response.data.status === "PASSED"
+            response.data.status !== "FAILED"
               ? "정답입니다!"
               : response.data.errorType
               ? `${response.data.errorType}`
