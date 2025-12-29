@@ -98,7 +98,7 @@ const ProblemPage = () => {
                     key={problem.problemId}
                     problemId={problem.problemId}
                     title={problem.title}
-                    description={`${problem.solveCount / problem.submitCount * 100}%`}
+                    description={`${problem.submitCount > 0 ? ((problem.solveCount / problem.submitCount) * 100).toFixed(2) : "0.00"}%`}
                     difficulty={problem.difficulty}
                     place={"problem"}
                   />
@@ -112,7 +112,7 @@ const ProblemPage = () => {
                     key={problem.problemId}
                     problemId={problem.problemId}
                     title={problem.title}
-                    description={`${problem.solveCount / problem.submitCount * 100}%`}
+                    description={`${problem.submitCount > 0 ? ((problem.solveCount / problem.submitCount) * 100).toFixed(2) : "0.00"}%`}
                     difficulty={problem.difficulty}
                     place={"problem"}
                   />
