@@ -9,10 +9,20 @@ import { getCookie } from "@/utils";
 
 
 
+
+type UserProfile = {
+  githubId: string;
+  displayName: string;
+  email: string;
+  profileImageUrl: string;
+  createdAt: string;
+};
+
 const ProblemPage = () => {
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
   const [problems, setProblems] = useState<ProblemResponseType[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<UserProfile | null>(null);
 
   useEffect(() => {
       const accessToken = getCookie("accessToken");
@@ -33,8 +43,8 @@ const ProblemPage = () => {
         fetchUser();
       }
     }, [isLoggedIn]);
-
-  const nickName = ;
+  
+  const nickName = user ? user.displayName : "탐정";
 
   const router = useRouter();
 

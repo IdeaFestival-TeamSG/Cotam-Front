@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { get, post } from "@/lib/api/http";
-import Alert from "@/components/Alert";
+import { Alert } from "@/components";
 import { cn } from "@/lib";
 import { ProblemDifficultType } from "@/types";
 import { DifficultyLevel } from "@/components";
