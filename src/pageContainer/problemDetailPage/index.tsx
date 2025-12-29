@@ -125,7 +125,7 @@ const ProblemDetailPage = () => {
         setSubmitResultModal({
           success: response.success,
           message:
-            response.data.status === "SOLVED"
+            response.data.status === "PASSED"
               ? "정답입니다!"
               : response.data.errorType
               ? `${response.data.errorType}`
