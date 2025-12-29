@@ -122,14 +122,22 @@ const ProblemDetailPage = () => {
       if (response.data.status === "RUNNING" || response.data.status === "PENDING") {
         setTimeout(() => checkSubmissionStatus(submissionId), 5000);
       } else {
+        const isCompileError = response.data.status === "COMPILE_ERROR";
+        const isFailed = response.data.status === "FAILED";
+        const isSuccess = !isCompileError && !isFailed;
+
+        let message = "정답입니다!";
+        if (isCompileError) {
+          message = response.data.errorType || "컴파일 에러가 발생했습니다.";
+        } else if (isFailed) {
+          message = response.data.errorType
+            ? `${response.data.errorType}`
+            : "오답입니다.";
+        }
+
         setSubmitResultModal({
-          success: response.data.status !== "FAILED",
-          message:
-            response.data.status !== "FAILED"
-              ? "정답입니다!"
-              : response.data.errorType
-              ? `${response.data.errorType}`
-              : "오답입니다.",
+          success: isSuccess,
+          message: message,
           details: response.data.executionTimeMs
             ? `실행 시간: ${response.data.executionTimeMs}ms`
             : undefined,
