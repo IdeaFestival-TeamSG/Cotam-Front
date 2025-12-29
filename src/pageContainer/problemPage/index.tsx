@@ -20,9 +20,9 @@ const ProblemPage = () => {
   const filterArrayDifficult: {title: string; difficult: ProblemDifficultType}[] = [
   { title: "기초", difficult: "BASIC" },
   { title: "쉬움", difficult: "EASY" },
-  { title: "보통", difficult: "NORMAL" },
+  { title: "보통", difficult: "MEDIUM" },
   { title: "어려움", difficult: "HARD" },
-  { title: "탐정(극한)", difficult: "DETECTIVE" },
+  { title: "탐정(극한)", difficult: "EXPERT" },
 ];
 
   const getProblems = async () => {

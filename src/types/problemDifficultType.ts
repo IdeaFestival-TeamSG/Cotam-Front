@@ -1,6 +1,6 @@
 export type ProblemDifficultType =
   | "BASIC"
   | "EASY"
-  | "NORMAL"
+  | "MEDIUM"
   | "HARD"
-  | "DETECTIVE";
+  | "EXPERT";

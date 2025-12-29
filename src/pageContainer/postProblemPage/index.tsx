@@ -23,9 +23,9 @@ type PostProblemForm = {
 const filterArrayDifficult: { title: string; difficult: ProblemDifficultType }[] = [
   { title: "기초", difficult: "BASIC" },
   { title: "쉬움", difficult: "EASY" },
-  { title: "보통", difficult: "NORMAL" },
+  { title: "보통", difficult: "MEDIUM" },
   { title: "어려움", difficult: "HARD" },
-  { title: "탐정(극한)", difficult: "DETECTIVE" },
+  { title: "탐정(극한)", difficult: "EXPERT" },
 ];
 
 const PostProblemPage = () => {
@@ -75,7 +75,7 @@ const PostProblemPage = () => {
     >
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-[67.387rem] flex flex-col gap-6 h-[30rem]"
+        className="w-[67.387rem] flex flex-col gap-6 h-[35rem]"
       >
         {/* Header */}
         <div className="flex items-center justify-between">
