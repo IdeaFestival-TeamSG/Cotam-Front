@@ -37,6 +37,47 @@ const ProblemDetailPage = () => {
   const [loading, setLoading] = useState(false);
   const [showDiffModal, setShowDiffModal] = useState(false);
 
+  const [runResult, setRunResult] = useState<string>("");
+
+  const runJavaScriptCode = () => {
+    if (language !== "javascript") return;
+    if (!problem) return;
+  
+    try {
+      // 1️⃣ 사용자 코드 실행 (add 함수 등록)
+      const fn = new Function(`${writeCode}; return typeof add === "function" ? add : null;`);
+      const addFn = fn();
+  
+      if (!addFn) {
+        setRunResult("❌ add(a, b) 함수가 정의되어 있지 않습니다.");
+        return;
+      }
+  
+      // 2️⃣ 테스트케이스 검사
+      for (let i = 0; i < problem.testCases.length; i++) {
+        const { input, expectedOutput } = problem.testCases[i];
+  
+        // "3 5" → [3, 5]
+        const args = input.split(" ").map(Number);
+  
+        const result = addFn(...args);
+  
+        if (String(result) !== String(expectedOutput)) {
+          setRunResult(
+            `❌ 실패 (테스트 ${i + 1})\n입력: ${input}\n기대값: ${expectedOutput}\n결과값: ${result}`,
+          );
+          return;
+        }
+      }
+  
+      // 3️⃣ 전부 통과
+      setRunResult("✅ 모든 테스트케이스 통과!");
+    } catch (error) {
+      setRunResult(`❌ 실행 오류: ${String(error)}`);
+    }
+  };
+  
+
   const userName = "이상혁";
 
   const tags = ["정답률 62.7%", "보통난이도", "즐겨찾기"];
@@ -240,6 +281,15 @@ const ProblemDetailPage = () => {
           </div>
 
           <div className="flex gap-1 justify-end">
+          {language === "javascript" && (
+            <button
+              type="button"
+              onClick={runJavaScriptCode}
+              className="p-[8px] bg-green-600 text-white cursor-pointer rounded-2xl text-base font-semibold h-[2.25rem]"
+            >
+              실행
+            </button>
+          )}
             <button
               type="button"
               onClick={() => setShowDiffModal(true)}
@@ -253,6 +303,11 @@ const ProblemDetailPage = () => {
             >
               답변 제출
             </button>
+            {runResult && (
+              <pre className="mt-2 p-3 bg-black text-green-400 rounded text-sm whitespace-pre-wrap">
+                {runResult}
+              </pre>
+            )}
           </div>
         </div>
       </div>
