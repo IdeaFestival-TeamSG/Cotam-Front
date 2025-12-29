@@ -20,7 +20,7 @@ const ProblemComponent = ({
       <div className="text-base not-italic font-semibold leading-[140%]">
         {title}
       </div>
-      <div className="flex justify-evenly w-full items-center">
+      <div className="flex justify-center w-full items-center">
         <p className="text-[#717872]">{description}</p>
         <div className="flex gap-2">
           <p className={`p-0 ${solved ? "text-[#32AB7B]" : "text-[#FF3B55]"}`}>{solved ? "해결" : "미해결"}</p>
