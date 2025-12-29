@@ -69,11 +69,14 @@ const ProblemDetailPage = () => {
       // 3️⃣ 테스트케이스 실행
       for (let i = 0; i < problem.testCases.length; i++) {
         const { input, expectedOutput } = problem.testCases[i];
-  
-        const args = input.split(" ");
-  
+
+        const args = input.split(" ").map((v) => {
+          const n = Number(v);
+          return isNaN(n) ? v : n;
+        });
+
         const result = userFn(...args);
-  
+
         if (String(result) !== String(expectedOutput)) {
           setRunResult(
             `❌ 실패 (테스트 ${i + 1})\n` +
