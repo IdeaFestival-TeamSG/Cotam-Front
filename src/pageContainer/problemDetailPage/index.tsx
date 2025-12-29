@@ -39,7 +39,9 @@ const ProblemDetailPage = () => {
   const [submitResultModal, setSubmitResultModal] = useState<{
     success: boolean;
     message: string;
+    details?: string;
   } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [runResult, setRunResult] = useState<string>("");
 
@@ -103,8 +105,50 @@ const ProblemDetailPage = () => {
   
 
 
+  const checkSubmissionStatus = async (submissionId: number) => {
+    try {
+      const response = await get<{
+        success: boolean;
+        code: string;
+        message: string;
+        data: {
+          submissionId: number;
+          status: string;
+          errorType: string | null;
+          executionTimeMs: number | null;
+        };
+      }>(`/submission/${submissionId}`);
+
+      if (response.data.status === "RUNNING") {
+        setTimeout(() => checkSubmissionStatus(submissionId), 5000);
+      } else {
+        setSubmitResultModal({
+          success: response.success,
+          message:
+            response.data.status === "SOLVED"
+              ? "정답입니다!"
+              : response.data.errorType
+              ? `${response.data.errorType}`
+              : "오답입니다.",
+          details: response.data.executionTimeMs
+            ? `실행 시간: ${response.data.executionTimeMs}ms`
+            : undefined,
+        });
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      console.error("상태 조회 중 오류 발생:", error);
+      setSubmitResultModal({
+        success: false,
+        message: "상태 조회 중 오류가 발생했습니다.",
+      });
+      setIsSubmitting(false);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!problemId) return;
+    setIsSubmitting(true);
 
     try {
       const response = await post<{
@@ -121,15 +165,14 @@ const ProblemDetailPage = () => {
       });
 
       if (response.success) {
-        setSubmitResultModal({
-          success: true,
-          message: response.message,
-        });
+        // 폴링 시작
+        checkSubmissionStatus(response.data.submissionId);
       } else {
         setSubmitResultModal({
           success: false,
           message: response.message || "제출에 실패했습니다.",
         });
+        setIsSubmitting(false);
       }
     } catch (error) {
       console.error("제출 중 오류 발생:", error);
@@ -137,6 +180,7 @@ const ProblemDetailPage = () => {
         success: false,
         message: "제출 중 오류가 발생했습니다.",
       });
+      setIsSubmitting(false);
     }
   };
 
@@ -385,9 +429,13 @@ def add():
             <button
               type="button"
               onClick={handleSubmit}
-              className="p-[8px] bg-black text-white cursor-pointer rounded-2xl text-base not-italic font-semibold leading-[100%] h-[2.25rem]"
+              disabled={isSubmitting}
+              className={cn(
+                "p-[8px] text-white cursor-pointer rounded-2xl text-base not-italic font-semibold leading-[100%] h-[2.25rem]",
+                isSubmitting ? "bg-gray-600 cursor-not-allowed" : "bg-black"
+              )}
             >
-              답변 제출
+              {isSubmitting ? "채점 중..." : "답변 제출"}
             </button>
             {runResult && (
               <pre className="mt-2 p-3 bg-black text-green-400 rounded text-sm whitespace-pre-wrap">
@@ -446,6 +494,9 @@ def add():
               {submitResultModal.success ? "제출 성공" : "제출 실패"}
             </h3>
             <p className="text-gray-400 text-center">{submitResultModal.message}</p>
+            {submitResultModal.details && (
+              <p className="text-gray-500 text-sm">{submitResultModal.details}</p>
+            )}
             <button
               onClick={() => setSubmitResultModal(null)}
               className={cn(
