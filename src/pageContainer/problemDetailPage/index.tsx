@@ -119,7 +119,7 @@ const ProblemDetailPage = () => {
         };
       }>(`/submission/${submissionId}`);
 
-      if (response.data.status === "RUNNING") {
+      if (response.data.status === "RUNNING" || response.data.status === "PENDING") {
         setTimeout(() => checkSubmissionStatus(submissionId), 5000);
       } else {
         setSubmitResultModal({
