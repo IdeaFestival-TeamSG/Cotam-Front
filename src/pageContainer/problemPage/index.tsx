@@ -5,14 +5,36 @@ import Plus from "@/assets/Plus";
 import { ProblemComponent, ProblemFilterIcon } from "@/components";
 import { cn, get } from "@/lib";
 import { ProblemComponentType, ProblemDifficultType, type ProblemResponseType } from "@/types"
+import { getCookie } from "@/utils";
 
 
 
 const ProblemPage = () => {
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
   const [problems, setProblems] = useState<ProblemResponseType[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const nickName = "오리너구리";
+  useEffect(() => {
+      const accessToken = getCookie("accessToken");
+      const refreshToken = getCookie("refreshToken");
+      setIsLoggedIn(!!(accessToken && refreshToken));
+    }, []);
+  
+    useEffect(() => {
+      if (isLoggedIn) {
+        const fetchUser = async () => {
+          try {
+            const response = await get<{ data: UserProfile }>("/user/me");
+            setUser(response.data);
+          } catch (error) {
+            console.error("사용자 정보 조회 실패:", error);
+          }
+        };
+        fetchUser();
+      }
+    }, [isLoggedIn]);
+
+  const nickName = ;
 
   const router = useRouter();
 
