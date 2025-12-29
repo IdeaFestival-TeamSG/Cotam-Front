@@ -44,40 +44,40 @@ const ProblemDetailPage = () => {
     if (!problem) return;
   
     try {
-      // 1️⃣ 실행 전 전역 함수 목록
-      const beforeKeys = new Set(Object.keys(globalThis));
+      // 1️⃣ 함수 이름 추출 (function xxx(...) 형태만 허용)
+      const match = writeCode.match(/function\s+([a-zA-Z_$][\w$]*)\s*\(/);
   
-      // 2️⃣ 사용자 코드 실행
-      new Function(writeCode)();
-  
-      // 3️⃣ 실행 후 새로 생긴 함수 찾기
-      const afterKeys = Object.keys(globalThis);
-  
-      const userFunctionKey = afterKeys.find(
-        (key) =>
-          !beforeKeys.has(key) &&
-          typeof (globalThis as any)[key] === "function",
-      );
-  
-      if (!userFunctionKey) {
-        setRunResult("❌ 함수가 선언되어 있지 않습니다.");
+      if (!match) {
+        setRunResult("❌ function 키워드로 선언된 함수가 필요합니다.");
         return;
       }
   
-      const userFn = (globalThis as any)[userFunctionKey] as Function;
+      const functionName = match[1];
   
-      // 4️⃣ 테스트케이스 실행
+      // 2️⃣ 함수 실행 및 반환
+      const fn = new Function(
+        `${writeCode}; return ${functionName};`,
+      );
+  
+      const userFn = fn();
+  
+      if (typeof userFn !== "function") {
+        setRunResult("❌ 함수 실행에 실패했습니다.");
+        return;
+      }
+  
+      // 3️⃣ 테스트케이스 실행
       for (let i = 0; i < problem.testCases.length; i++) {
         const { input, expectedOutput } = problem.testCases[i];
   
         const args = input.split(" ");
   
-        const result = userFn(...args.slice(0, args.length));
+        const result = userFn(...args);
   
         if (String(result) !== String(expectedOutput)) {
           setRunResult(
             `❌ 실패 (테스트 ${i + 1})\n` +
-              `함수명: ${userFunctionKey}\n` +
+              `함수명: ${functionName}\n` +
               `입력: ${input}\n` +
               `기대값: ${expectedOutput}\n` +
               `결과값: ${result}`,
@@ -86,14 +86,13 @@ const ProblemDetailPage = () => {
         }
       }
   
-      // 5️⃣ 성공
-      setRunResult(
-        `✅ 모든 테스트케이스 통과!\n사용된 함수: ${userFunctionKey}`,
-      );
+      // 4️⃣ 전부 성공
+      setRunResult(`✅ 모든 테스트케이스 통과!\n함수명: ${functionName}`);
     } catch (error) {
       setRunResult(`❌ 실행 오류: ${String(error)}`);
     }
   };
+  
   
   
 
