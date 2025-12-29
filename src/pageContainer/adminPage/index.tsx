@@ -76,7 +76,7 @@ const AdminPage = () => {
                         `/admin/problem?id=${problem.pendingProblemId}`
                       )
                     }
-                    className="flex items-center justify-between p-6 border border-gray-200 rounded-xl cursor-pointer hover:border-[#32AB7B] hover:shadow-md transition-all bg-white"
+                    className="flex items-center justify-between p-6 border border-gray-200 rounded-xl cursor-pointer hover:border-[#CF4646] hover:shadow-md transition-all bg-white"
                   >
                     <div className="flex flex-col gap-2">
                       <span className="text-sm text-gray-400 font-medium">

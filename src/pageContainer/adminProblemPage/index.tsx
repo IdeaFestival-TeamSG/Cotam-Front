@@ -127,7 +127,7 @@ const AdminProblemPage = () => {
   }
 
   return (
-    <div className="w-screen min-h-screen flex justify-center py-20 bg-white">
+    <div className="w-screen min-h-screen flex justify-center items-center py-20 bg-white">
       <div className="w-[67.387rem] flex flex-col gap-8">
         {/* Header */}
         <div className="flex justify-between items-center border-b pb-6">
@@ -171,7 +171,7 @@ const AdminProblemPage = () => {
                 </button>
                 <button
                   onClick={handleApprove}
-                  className="px-6 py-2 bg-[#32AB7B] text-white rounded-lg font-semibold hover:bg-[#2a9369] transition-colors"
+                  className="px-6 py-2 bg-[#CF4646] text-white rounded-lg font-semibold hover:bg-[#A13636] transition-colors"
                 >
                   승인
                 </button>
@@ -185,7 +185,7 @@ const AdminProblemPage = () => {
           {/* Left: Description */}
           <div className="flex-1 flex flex-col gap-6">
             <section className="flex flex-col gap-3">
-              <h2 className="text-xl font-bold border-l-4 border-[#32AB7B] pl-3">
+              <h2 className="text-xl font-bold border-l-4 border-[#CF4646] pl-3">
                 문제 설명
               </h2>
               <div className="p-6 bg-gray-50 rounded-xl min-h-[200px] whitespace-pre-wrap">
@@ -208,7 +208,7 @@ const AdminProblemPage = () => {
           {/* Right: Test Cases */}
           <div className="w-[20rem] flex flex-col gap-6">
             <section className="flex flex-col gap-3">
-              <h2 className="text-xl font-bold border-l-4 border-[#32AB7B] pl-3">
+              <h2 className="text-xl font-bold border-l-4 border-[#CF4646] pl-3">
                 테스트케이스
               </h2>
               <div className="flex flex-col gap-4">

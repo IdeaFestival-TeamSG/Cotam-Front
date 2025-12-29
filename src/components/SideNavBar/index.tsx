@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib";
 
 const NAV_ITEMS = [
   {
@@ -57,54 +58,61 @@ const SideNavBar = () => {
     }, 80);
   };
 
+  const isAdmin = pathname.startsWith("/admin");
+
   return (
     <nav className="pl-60 h-screen flex justify-center items-center">
       <div
-        className={`relative flex flex-col justify-between items-center rounded-[3rem] py-2 w-16 h-152.5
-        bg-[linear-gradient(180deg,#000_0%,#113225_32.94%,#143B2C_56.55%,#297959_85.58%,#36A177_96.67%,#46CF99_100%)]
-        ${isNavigating ? "pointer-events-none" : ""}`}
+        className={cn(
+          "relative flex flex-col justify-between items-center rounded-[3rem] py-2 w-16 h-152.5",
+          isAdmin
+            ? "bg-[linear-gradient(180deg,#000_0%,#321111_20%,#3B1414_40%,#792929_70%,#A13636_90%,#CF4646_100%)]"
+            : "bg-[linear-gradient(180deg,#000_0%,#113225_32.94%,#143B2C_56.55%,#297959_85.58%,#36A177_96.67%,#46CF99_100%)]",
+          isNavigating && "pointer-events-none"
+        )}
       >
-        {NAV_ITEMS.map((item) => {
-          const active =
-            item.href === "/"
-              ? activeHref === item.href
-              : item.href === "/problem"
+        {!isAdmin &&
+          NAV_ITEMS.map((item) => {
+            const active =
+              item.href === "/"
+                ? activeHref === item.href
+                : item.href === "/problem"
                 ? activeHref.startsWith(item.href) ||
                   activeHref.startsWith("/postProblem")
                 : activeHref.startsWith(item.href);
 
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => handleClick(item.href)}
-              className="relative w-12 h-12 flex items-center justify-center"
-            >
-              {active && (
-                <motion.div
-                  layoutId="nav-indicator"
-                  className="absolute w-10 h-10 rounded-full"
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: isMoving ? 1 : 0,
-                    backgroundColor: isMoving ? "#ffffff" : "transparent",
-                  }}
-                  transition={{
-                    duration: 0.15,
-                    ease: "easeOut",
-                  }}
-                  onLayoutAnimationStart={() => setIsMoving(true)}
-                  onLayoutAnimationComplete={() => setIsMoving(false)}
-                />
-              )}
-              {active ? (
-                <img src={item.clickedIcon} alt={item.id} />
-              ) : (
-                <img src={item.icon} alt={item.id} />
-              )}
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleClick(item.href)}
+                className="relative w-12 h-12 flex items-center justify-center"
+              >
+                {active && (
+                  <motion.div
+                    layoutId="nav-indicator"
+                    className="absolute w-10 h-10 rounded-full"
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: isMoving ? 1 : 0,
+                      backgroundColor: isMoving ? "#ffffff" : "transparent",
+                    }}
+                    transition={{
+                      duration: 0.15,
+                      ease: "easeOut",
+                    }}
+                    onLayoutAnimationStart={() => setIsMoving(true)}
+                    onLayoutAnimationComplete={() => setIsMoving(false)}
+                  />
+                )}
+                {active ? (
+                  <img src={item.clickedIcon} alt={item.id} />
+                ) : (
+                  <img src={item.icon} alt={item.id} />
+                )}
+              </button>
+            );
+          })}
       </div>
     </nav>
   );
