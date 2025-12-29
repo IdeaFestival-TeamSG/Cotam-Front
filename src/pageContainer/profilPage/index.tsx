@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib";
 import { get } from "@/lib/api/http";
-import { getCookie } from "@/utils";
+import { getCookie, deleteCookie } from "@/utils";
 
 
 type UserProfile = {
@@ -45,6 +45,12 @@ const ProfilPage = () => {
     }
   };
 
+  const handleLogout = () => {
+    deleteCookie("accessToken");
+    deleteCookie("refreshToken");
+    window.location.reload();
+  };
+
   if (!isLoggedIn) {
     return (
       <div
@@ -82,6 +88,12 @@ const ProfilPage = () => {
           <h1 className="text-2xl font-bold text-black">{user.displayName}</h1>
           <p className="text-gray-500 text-lg">{user.email}</p>
           <p className="text-gray-400 text-sm">{user.githubId}</p>
+          <button
+            onClick={handleLogout}
+            className="mt-4 px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-semibold"
+          >
+            로그아웃
+          </button>
         </div>
       )}
     </div>
