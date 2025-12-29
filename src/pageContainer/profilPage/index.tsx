@@ -4,14 +4,38 @@ import { cn } from "@/lib";
 import { get } from "@/lib/api/http";
 import { getCookie } from "@/utils";
 
+
+type UserProfile = {
+  githubId: string;
+  displayName: string;
+  email: string;
+  profileImageUrl: string;
+  createdAt: string;
+};
+
 const ProfilPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     const accessToken = getCookie("accessToken");
     const refreshToken = getCookie("refreshToken");
     setIsLoggedIn(!!(accessToken && refreshToken));
   }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const fetchUser = async () => {
+        try {
+          const response = await get<{ data: UserProfile }>("/user/me");
+          setUser(response.data);
+        } catch (error) {
+          console.error("사용자 정보 조회 실패:", error);
+        }
+      };
+      fetchUser();
+    }
+  }, [isLoggedIn]);
 
   const handleGitHubLogin = async () => {
     try {
@@ -47,7 +71,20 @@ const ProfilPage = () => {
       className={cn(
         "w-screen h-screen flex justify-center items-center pl-40 gap-40",
       )}
-    ></div>
+    >
+      {user && (
+        <div className="flex flex-col items-center gap-4">
+          <img
+            src={user.profileImageUrl}
+            alt="Profile"
+            className="w-32 h-32 rounded-full object-cover border-2 border-gray-200"
+          />
+          <h1 className="text-2xl font-bold text-black">{user.displayName}</h1>
+          <p className="text-gray-500 text-lg">{user.email}</p>
+          <p className="text-gray-400 text-sm">{user.githubId}</p>
+        </div>
+      )}
+    </div>
   );
 };
 
