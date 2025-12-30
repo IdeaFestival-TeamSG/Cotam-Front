@@ -19,15 +19,17 @@ import type { ProblemResponseType, ProblemStatusType } from "@/types";
 import { get, post } from "@/lib";
 
 type ProblemDetail = {
-          problemId: number;
-          title: string;
-          description: string;
-          difficulty: string;
-          testCases: {
-            input: string;
-            expectedOutput: string;
-          }[];
-        };
+  problemId: number;
+  title: string;
+  description: string;
+  difficulty: "BASIC" | "EASY" | "MEDIUM" | "HARD" | "EXPERT";
+  testCases: {
+    input: string;
+    expectedOutput: string;
+  }[];
+  authorDisplayName: string;
+  authorProfileImageUrl: string;
+};
 
 const ProblemDetailPage = () => {
   const params = useParams();
@@ -45,64 +47,6 @@ const ProblemDetailPage = () => {
 
   const [runResult, setRunResult] = useState<string>("");
 
-  const runJavaScriptCode = () => {
-    if (language !== "javascript") return;
-    if (!problem) return;
-  
-    try {
-      // 1️⃣ 함수 이름 추출 (function xxx(...) 형태만 허용)
-      const match = writeCode.match(/function\s+([a-zA-Z_$][\w$]*)\s*\(/);
-  
-      if (!match) {
-        setRunResult("❌ function 키워드로 선언된 함수가 필요합니다.");
-        return;
-      }
-  
-      const functionName = match[1];
-  
-      // 2️⃣ 함수 실행 및 반환
-      const fn = new Function(
-        `${writeCode}; return ${functionName};`,
-      );
-  
-      const userFn = fn();
-  
-      if (typeof userFn !== "function") {
-        setRunResult("❌ 함수 실행에 실패했습니다.");
-        return;
-      }
-  
-      // 3️⃣ 테스트케이스 실행
-      for (let i = 0; i < problem.testCases.length; i++) {
-        const { input, expectedOutput } = problem.testCases[i];
-
-        const args = input.split(" ").map((v) => {
-          const n = Number(v);
-          return isNaN(n) ? v : n;
-        });
-
-        const result = userFn(...args);
-
-        if (String(result) !== String(expectedOutput)) {
-          setRunResult(
-            `❌ 실패 (테스트 ${i + 1})\n` +
-              `함수명: ${functionName}\n` +
-              `입력: ${input}\n` +
-              `기대값: ${expectedOutput}\n` +
-              `결과값: ${result}`,
-          );
-          return;
-        }
-      }
-  
-      // 4️⃣ 전부 성공
-      setRunResult(`✅ 모든 테스트케이스 통과!\n함수명: ${functionName}`);
-    } catch (error) {
-      setRunResult(`❌ 실행 오류: ${String(error)}`);
-    }
-  };
-  
-  
 
 
   const checkSubmissionStatus = async (submissionId: number) => {
@@ -192,10 +136,6 @@ const ProblemDetailPage = () => {
     }
   };
 
-  const userName = "이상혁";
-
-  const tags = ["정답률 62.7%", "보통난이도", "즐겨찾기"];
-
   const [language, setLanguage] = useState<"javascript" | "python">("javascript");
 
   const exampleJSCode = `
@@ -209,8 +149,64 @@ def add():
     return
   `.trim();
 
-
   const [writeCode, setWriteCode] = useState<string>(exampleJSCode);
+
+  const runJavaScriptCode = () => {
+    if (language !== "javascript") return;
+    if (!problem) return;
+  
+    try {
+      // 1️⃣ 함수 이름 추출 (function xxx(...) 형태만 허용)
+      const match = writeCode.match(/function\s+([a-zA-Z_$][\w$]*)\s*\(/);
+  
+      if (!match) {
+        setRunResult("❌ function 키워드로 선언된 함수가 필요합니다.");
+        return;
+      }
+  
+      const functionName = match[1];
+  
+      // 2️⃣ 함수 실행 및 반환
+      const fn = new Function(
+        `${writeCode}; return ${functionName};`,
+      );
+  
+      const userFn = fn();
+  
+      if (typeof userFn !== "function") {
+        setRunResult("❌ 함수 실행에 실패했습니다.");
+        return;
+      }
+  
+      // 3️⃣ 테스트케이스 실행
+      for (let i = 0; i < problem.testCases.length; i++) {
+        const { input, expectedOutput } = problem.testCases[i];
+
+        const args = input.split(" ").map((v) => {
+          const n = Number(v);
+          return isNaN(n) ? v : n;
+        });
+
+        const result = userFn(...args);
+
+        if (String(result) !== String(expectedOutput)) {
+          setRunResult(
+            `❌ 실패 (테스트 ${i + 1})\n` +
+              `함수명: ${functionName}\n` +
+              `입력: ${input}\n` +
+              `기대값: ${expectedOutput}\n` +
+              `결과값: ${result}`,
+          );
+          return;
+        }
+      }
+  
+      // 4️⃣ 전부 성공
+      setRunResult(`✅ 모든 테스트케이스 통과!\n함수명: ${functionName}`);
+    } catch (error) {
+      setRunResult(`❌ 실행 오류: ${String(error)}`);
+    }
+  };
 
   useEffect(() => {
     setWriteCode(language === "javascript" ? exampleJSCode : examplePythonCode);
@@ -219,9 +215,7 @@ def add():
   useEffect(() => {
     const fetchProblem = async () => {
       try {
-        // TODO: 실제 API 엔드포인트로 변경 필요
-
-        const response = await get<{ data:  ProblemDetail }>(`/problem/${problemId}`);
+        const response = await get<{ data: ProblemDetail }>(`/problem/${problemId}`);
         setProblem(response.data);
 
         setLoading(false);
@@ -242,30 +236,20 @@ def add():
     language,
   );
 
-  const getStatusText = (status?: ProblemStatusType) => {
-    switch (status) {
-      case "PENDING":
-        return "대기중";
-      case "SOLVED":
-        return "해결";
-      case "YET":
-        return "미해결";
-      default:
-        return "알 수 없음";
+  const getDifficultyText = (diff: string) => {
+    switch (diff) {
+      case "BASIC": return "기초";
+      case "EASY": return "쉬움";
+      case "MEDIUM": return "보통";
+      case "HARD": return "어려움";
+      case "EXPERT": return "탐정(극한)";
+      default: return diff;
     }
   };
 
-  const getStatusColor = (status?: ProblemStatusType) => {
-    switch (status) {
-      case "PENDING":
-        return "#DEA343";
-      case "SOLVED":
-        return "#32AB7B";
-      case "YET":
-        return "#FF3B55";
-      default:
-        return "#717872";
-    }
+  const getTags = () => {
+    if (!problem) return [];
+    return ["정답률 62.7%", getDifficultyText(problem.difficulty), "즐겨찾기"];
   };
 
   if (loading) {
@@ -315,7 +299,7 @@ def add():
                     {problem.title}
                   </div>
                   <div className="flex items-center justify-center">
-                    <DifficultyLevel difficult="BASIC" />
+                    <DifficultyLevel difficult={problem.difficulty} />
                   </div>
                 </div>
                 <GreenStar />
@@ -323,17 +307,18 @@ def add():
 
               <div className="flex items-center gap-[0.38rem]">
                 <img
-                  alt="줄제자 로고"
-                  className="w-6 h-6 border border-solid rounded-3xl border-black"
+                  src={problem.authorProfileImageUrl}
+                  alt="출제자 프로필"
+                  className="w-6 h-6 border border-solid rounded-3xl border-black object-cover"
                 />
                 <p className="text-sm not-italic font-normal text-[#48514C]">
-                  {userName}
+                  {problem.authorDisplayName}
                 </p>
               </div>
             </div>
 
             <div className="flex gap-2">
-              {tags.map((x, index) => {
+              {getTags().map((x, index) => {
                 return (
                   <p
                     key={`${x} + ${index}`}
