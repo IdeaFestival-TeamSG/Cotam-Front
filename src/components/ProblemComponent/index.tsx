@@ -23,7 +23,7 @@ const ProblemComponent = ({
       <div className="flex justify-between w-full items-center">
         <p className="text-[#717872]">{description}</p>
         <div className="flex gap-2">
-          <div className={`text-center ${solved ? "text-[#32AB7B]" : "text-[#FF3B55]"}`}>{solved ? "해결" : "미해결"}</div>
+          <div className={`text-center flex justify-center items-center ${solved ? "text-[#32AB7B]" : "text-[#FF3B55]"}`}>{solved ? "해결" : "미해결"}</div>
           <DifficultyLevel difficult={difficulty} /></div>
       </div>
     </div>
