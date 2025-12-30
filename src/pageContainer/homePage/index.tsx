@@ -2,24 +2,12 @@
 
 import Image from "next/image";
 import { MainHoverComponent } from "@/components";
-import { cn, get } from "@/lib";
-import { useEffect } from "react";
+import { cn } from "@/lib";
 
 const HomePage = () => {
   const upText = ["COTAM", "Version-Alpha 1.0", "Algorithm Test"];
   const downText = ["Find Error", "Coding Test", "For Developer"];
 
-  useEffect(() => {
-    const fetchRanking = async () => {
-      try {
-        const response = await get("/ranking");
-        console.log("Ranking response:", response);
-      } catch (error) {
-        console.error("Failed to fetch ranking:", error);
-      }
-    };
-    fetchRanking();
-  }, []);
 
   return (
     <div
