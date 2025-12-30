@@ -21,7 +21,7 @@ const NAV_ITEMS = [
   },
   {
     id: "settings",
-    href: "/ranking",
+    href: "/rankings",
     icon: "/rankingLogoNav.svg",
     clickedIcon: "/clickedRankingLogoNav.svg",
   },
