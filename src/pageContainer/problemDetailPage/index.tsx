@@ -491,7 +491,12 @@ def add():
               <p className="text-gray-500 text-sm">{submitResultModal.details}</p>
             )}
             <button
-              onClick={() => setSubmitResultModal(null)}
+              onClick={() => {
+                setSubmitResultModal(null)
+                if(submitResultModal.success){
+                  router.push(`/problem`);
+                }
+              }}
               className={cn(
                 "mt-4 px-6 py-2 rounded-lg font-semibold text-white transition-colors",
                 submitResultModal.success
