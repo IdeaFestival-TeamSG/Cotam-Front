@@ -82,9 +82,9 @@ const ProfilPage = () => {
   const expPercentage = user ? Math.min((user.exp / maxExp) * 100, 100) : 0;
 
   return (
-    <div className="w-full min-h-screen py-20 px-4 bg-gray-50 flex justify-center items-start">
+    <div className="w-full h-screen py-20 px-4 bg-gray-50 flex justify-center items-center">
       {user ? (
-        <div className="w-full max-w-4xl flex flex-col gap-6">
+        <div className="w-full max-w-4xl flex flex-col gap-6 max-h-[38.125rem] overflow-y-auto">
           {/* Cover / Profile Header Card */}
           <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-r from-blue-50 to-indigo-50 opacity-50 pointer-events-none" />
