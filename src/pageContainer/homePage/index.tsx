@@ -3,10 +3,25 @@
 import Image from "next/image";
 import { MainHoverComponent } from "@/components";
 import { cn } from "@/lib";
+import { useEffect } from "react";
+import { get } from "http";
 
 const HomePage = () => {
   const upText = ["COTAM", "Version-Alpha 1.0", "Algorithm Test"];
   const downText = ["Find Error", "Coding Test", "For Developer"];
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await get(`/ranking`);
+        console.log(response)
+      } catch (error) {
+        console.error("사용자 정보 조회 실패:", error);
+      }
+    };
+
+    fetchUser();
+  }, [])
 
   return (
     <div
