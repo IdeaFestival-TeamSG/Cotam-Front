@@ -64,12 +64,21 @@ const ProblemPage = () => {
 
   const getProblems = async (page: number) => {
     try {
+      const selectedDifficulties = filterArrayDifficult
+        .filter((item) => selectedFilter.includes(item.title))
+        .map((item) => item.difficult);
+
+      const difficultyQuery =
+        selectedDifficulties.length > 0
+          ? `&difficulty=${selectedDifficulties.join(",")}`
+          : "";
+
       const response = await get<{
         data: {
           content: ProblemResponseType[];
           totalPages: number;
         };
-      }>(`/problem?page=${page}&size=10`);
+      }>(`/problem?page=${page}&size=10${difficultyQuery}`);
       console.log(response.data.content);
       setProblems(response.data.content);
       setTotalPages(response.data.totalPages);
@@ -80,12 +89,19 @@ const ProblemPage = () => {
 
   useEffect(() => {
     getProblems(currentPage);
-  }, [currentPage]);
+  }, [currentPage, selectedFilter]);
 
   const handlePageChange = (page: number) => {
     if (page >= 0 && page < totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  const handleSetFilter: React.Dispatch<React.SetStateAction<string[]>> = (
+    action
+  ) => {
+    setSelectedFilter(action);
+    setCurrentPage(0);
   };
 
   return (
@@ -116,7 +132,7 @@ const ProblemPage = () => {
                     key={x}
                     text={x}
                     isChecked={selectedFilter.includes(x)}
-                    setChecked={setSelectedFilter}
+                    setChecked={handleSetFilter}
                   />
                 ))}
               </div>
@@ -126,7 +142,7 @@ const ProblemPage = () => {
                     key={x.title}
                     text={x.title}
                     isChecked={selectedFilter.includes(x.title)}
-                    setChecked={setSelectedFilter}
+                    setChecked={handleSetFilter}
                   />
                 ))}
               </div>
